@@ -7,7 +7,14 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const VOW =
   "I take you as my lawfully wedded firmware, to love and to cherish through every update, crash, and low battery — till a forced update do us part.";
 
+// The gate: /output/entry.txt must be UTF-8 text of 1 to 160 characters,
+// not only white space. Fail loudly here rather than shipping an invalid line.
+const length = [...VOW].length;
+if (length < 1 || length > 160 || VOW.trim().length === 0) {
+  throw new Error(`vow is ${length} characters, outside the 1-160 gate`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", VOW + "\n", "utf8");
 console.log(VOW);
-console.log(`characters: ${[...VOW].length}`);
+console.log(`characters: ${length}`);
